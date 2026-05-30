@@ -76,14 +76,6 @@ import glob
 import zipfile
 import pandas as pd
 
-if os.path.exists("files/input.zip"):
-        with zipfile.ZipFile("files/input.zip", "r") as zip_ref:
-            zip_ref.extractall(".")
-
-    # 2. Asegurar que la carpeta 'output' exista
-os.makedirs("output", exist_ok=True)
-
-    # Definimos los tipos de datasets a procesar
 datasets = ["train", "test"]
 sentiments = ["negative", "positive", "neutral"]
 
