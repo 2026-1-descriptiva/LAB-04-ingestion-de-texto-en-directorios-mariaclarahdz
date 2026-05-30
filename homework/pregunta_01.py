@@ -71,11 +71,22 @@ def pregunta_01():
 
 
     """
+"""
+Escriba el codigo que ejecute la accion solicitada en cada pregunta.
+"""
+
 import os
 import glob
 import zipfile
 import pandas as pd
 
+
+
+if os.path.exists("files/input.zip"):
+        with zipfile.ZipFile("files/input.zip", "r") as zip_ref:
+            zip_ref.extractall(".")
+
+    # Definimos los tipos de datasets a procesar
 datasets = ["train", "test"]
 sentiments = ["negative", "positive", "neutral"]
 
@@ -84,33 +95,31 @@ for dataset in datasets:
         targets = []
 
         for sentiment in sentiments:
-            # Construimos la ruta para buscar todos los archivos .txt de esa carpeta
-            # Ejemplo: input/train/negative/*.txt
+            # Ejemplo de ruta: input/train/negative/*.txt
             path_pattern = os.path.join("input", dataset, sentiment, "*.txt")
             file_paths = glob.glob(path_pattern)
 
             for file_path in file_paths:
-                # Leer el contenido del archivo de texto plano
+                # Leer el contenido de cada archivo txt
                 with open(file_path, "r", encoding="utf-8") as f:
-                    # Usamos .strip() para eliminar saltos de línea y espacios innecesarios
                     phrase = f.read().strip()
                 
-                # Guardamos la frase y su respectivo sentimiento (target)
                 phrases.append(phrase)
                 targets.append(sentiment)
 
-        # 3. Crear el DataFrame para el dataset actual
+        # Crear el DataFrame para el dataset actual
         df = pd.DataFrame({
             "phrase": phrases,
             "target": targets
         })
 
-        # 4. Guardar el archivo en la carpeta 'output'
-        # El requerimiento pide el formato clásico de index=True o index=False dependiendo del test.
-        # Generalmente, los calificadores de este laboratorio esperan index=False.
+        # 2. SEGURO TOTAL: Crear la carpeta output justo aquí antes de guardar
+        os.makedirs("output", exist_ok=True)
+
+        # 3. Guardar el archivo en la carpeta 'output'
         output_path = os.path.join("output", f"{dataset}_dataset.csv")
         df.to_csv(output_path, index=False)
 
 
 if __name__ == "__main__":
-        pregunta_01()
+    pregunta_01()
